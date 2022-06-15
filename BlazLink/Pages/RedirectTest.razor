@@ -1,0 +1,76 @@
+﻿@page "/l"
+@inject HttpClient Http
+@inject NavigationManager NavManager
+
+<!--p>Short Url: @shortUrl</p-->
+<!--p>main site: @mainUrl2</p-->
+
+
+
+@if (shortlinks == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table>
+        <tr>
+            <td>Name &emsp;</td>
+            <td>Main Url &emsp;</td>
+            <td>Short Url &emsp;</td>
+        </tr>
+    @foreach (var shortlink in shortlinks) 
+    {
+        if((shortlink.ListOnPage == "true") || (shortlink.ListOnPage=="TRUE"))
+       // @if(shortlink.ListOnPage)
+        {   
+            <tr>
+                <td>
+            <p>@shortlink.Name &emsp;</p>
+            </td>
+            <td>
+            <p>@shortlink.MainUrl &emsp;</p>
+            </td>
+            <td>
+            <p> @shortlink.ShortUrl</p>
+            </td>
+            
+                
+            </tr>
+        }
+    }
+    </table>
+}
+
+@code {
+    private Shortlinks[] shortlinks;
+    private string shortUrl = string.Empty;
+    private string mainUrl2 = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        shortlinks = await Http.GetFromJsonAsync<Shortlinks[]>("links.json");
+
+        NavManager.TryGetQueryString<string>("u", out shortUrl);
+
+        foreach(var shortlink in shortlinks)
+        {
+            if(shortUrl == shortlink.ShortUrl)
+            {
+                shortUrl = "in list";
+                NavManager.NavigateTo(shortlink.MainUrl);
+            }
+        }
+        shortUrl = shortUrl + " is not in list";
+    }
+
+    public class Shortlinks
+    {
+        public string Name { get; set; }
+        public string MainUrl { get; set; }
+        public string ShortUrl { get; set; }
+        public string ListOnPage { get; set; }
+        
+        //public Boolean ListOnPage { get; set; }
+    }
+}
