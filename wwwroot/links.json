@@ -22,5 +22,11 @@
     "MainUrl": "https://Twitch.tv/OGJunkyard",
     "ShortUrl": "ogt",
     "ListOnPage": "FALSE"
+  },
+  {
+    "Name": "Blazlink Github",
+    "MainUrl": "https://github.com/Flavius-The-Person/Blaz-Link",
+    "ShortUrl": "BLGithub",
+    "ListOnPage": "TRUE"
   }
 ]
