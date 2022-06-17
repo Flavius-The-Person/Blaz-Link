@@ -1,0 +1,187 @@
+﻿@page "/p"
+@inject HttpClient Http
+@inject NavigationManager NavManager
+
+<!--p>Short Url: @shortUrl</p-->
+<!--p>main site: @mainUrl2</p-->
+
+@if(inList)
+{
+    <p>in list</p>
+}
+@if(!inList)
+{
+    <p>Not in list</p>
+}
+@if (profile == null)
+{
+    @if(profiles != null)
+    {
+        <p> profiles has content while profile still loading</p>
+        @foreach(var pfile in profiles)
+        {
+            <p>@pfile.User</p>
+        }
+    }
+    <p>Loading...</p>
+
+}
+else
+{
+    <table>
+        @foreach(var profile in profile)
+        {
+        <tr>
+            <td>User &emsp;</td>
+            <td>Name &emsp;</td>
+            @if (profile.Website != "")
+            {
+                <td>Main Website &emsp;</td>
+            }
+            @if (profile.Twitch != "")
+            {
+                <td>Twitch &emsp;</td>
+            }
+            @if (profile.Discord != "")
+            {
+                <td>Discord &emsp;</td>
+            }
+            @if (profile.Twitter != "")
+            {
+                <td>Twitter &emsp;</td>
+            }
+
+        </tr>
+    
+        <tr>
+            <td>@profile.User</td>
+            <td>@profile.Name</td>
+            @if (profile.Website != "")
+            {
+                <td>@profile.Website</td>
+            }
+            @if (profile.Twitch != "")
+            {
+                <td>@profile.Twitch</td>
+            }
+            @if (profile.Discord != "")
+            {
+                <td>@profile.Discord</td>
+            }
+            @if (profile.Twitter != "")
+            {
+                <td>@profile.Twitter</td>
+            }
+        </tr>
+        }
+    </table>
+}
+
+@code 
+{
+    /*private Profile[] profile;
+            private Profiles[] profiles;*/
+    private List<Profile> profile;//List<Profile> profile;
+    private Profiles[] profiles;
+
+    private string who = string.Empty;
+    private bool inList = false;
+    private bool memberFound = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        NavManager.TryGetQueryString<string>("u", out who);
+        Console.Out.WriteLine("who is: " + who);
+        if (who != string.Empty)
+        {
+            try
+            {//make json for getting list of people to add then load each into a profile object
+                profiles = await Http.GetFromJsonAsync<Profiles[]>("profiles/" + "FullDisplayProfiles" + ".json");
+                try
+                {
+                    
+                    foreach(var pfile in profiles)
+                    {
+                        if(pfile.User.Equals(who))// == who)
+                        {
+                            profile.Add(await Http.GetFromJsonAsync<Profile>("profiles/" + who + ".json"));
+                                //Append( await Http.GetFromJsonAsync<Profile[]>("profiles"+pfile.User + ".json"));
+                            //profile.Add(await Http.GetFromJsonAsync<Profile>("profiles/"+ pfile.User + ".json"));
+                            inList = true;
+                            memberFound = true;
+                        }
+                        //profile.Add(await Http.GetFromJsonAsync<Profile>("profiles/"+ pfile.User + ".json"));
+                        //profile.Append(await Http.GetFromJsonAsync<Profile[]>("profiles/" + pfile.User + ".json"));
+                    }
+                }
+                catch(Exception notFound)
+                {
+                    Console.Out.WriteLine("not found after attempting to add to profile group");
+                    Console.Out.WriteLine(notFound);
+                }
+            }
+            catch (Exception notFound)
+            {
+                Console.Out.WriteLine("Not found when attempting to read from full diplay profiles");
+                Console.Out.WriteLine(notFound);
+            }
+            /*
+            try
+            {
+                profile = await Http.GetFromJsonAsync<List<Profile>>("profiles/" + who + ".json");
+
+                inList = true;
+                memberFound = true;
+
+            }
+            catch (Exception notFound)
+            {
+                Console.Out.WriteLine(notFound);
+            }*/
+        }
+        if(!memberFound)
+        {
+            try
+            {//make json for getting list of people to add then load each into a profile object
+                /*profiles = await Http.GetFromJsonAsync<Profiles[]>("profiles/" + "FullDisplayProfiles" + ".json");
+                try
+                {
+                    foreach(var pfile in profiles)
+                    {
+                        profile.Add(await Http.GetFromJsonAsync<Profile>("profiles/"+ pfile.User + ".json"));
+                        //profile.Append(await Http.GetFromJsonAsync<Profile[]>("profiles/" + pfile.User + ".json"));
+                    }
+                }
+                catch(Exception notFound)
+                {
+                    Console.Out.WriteLine("not found after attempting to add to profile group");
+                    Console.Out.WriteLine(notFound);
+                }*/
+            }
+            catch (Exception notFound)
+            {
+                Console.Out.WriteLine("Not found when attempting to read from full diplay profiles");
+                Console.Out.WriteLine(notFound);
+            }
+        }
+
+
+    }
+    public class Profiles
+    {
+        public string User { get; set; }
+        public string ListOnPage { get; set;  }
+    }
+    public class Profile
+    {
+        public string User { get; set; }
+        public string Name { get; set; }
+        public string Website { get; set; }
+        public string ListOnPage { get; set; }
+        public string Twitch { get; set; }
+        public string Discord { get; set; }
+        public string Twitter { get; set; }
+
+        //public Boolean ListOnPage { get; set; }
+    }
+}
