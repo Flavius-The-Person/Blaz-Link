@@ -13,7 +13,7 @@
 {
     <p>Not in list</p>
 }
-@if (profile == null)
+@if(profile.Count==0)
 {
     @if(profiles != null)
     {
@@ -27,53 +27,56 @@
 
 }
 else
+@if(profile.Count>0)
 {
+    <p>profile is not null</p>
+    <p>profile count is: @profile.Count</p>
     <table>
-        @foreach(var profile in profile)
+        @foreach(var pfile in profile)
         {
-        <tr>
-            <td>User &emsp;</td>
-            <td>Name &emsp;</td>
-            @if (profile.Website != "")
-            {
-                <td>Main Website &emsp;</td>
-            }
-            @if (profile.Twitch != "")
-            {
-                <td>Twitch &emsp;</td>
-            }
-            @if (profile.Discord != "")
-            {
-                <td>Discord &emsp;</td>
-            }
-            @if (profile.Twitter != "")
-            {
-                <td>Twitter &emsp;</td>
-            }
+            <tr>
+                <td>User &emsp;</td>
+                <td>Name &emsp;</td>
+                @if (pfile.Website!="")
+                {
+                    <td>Main Website &emsp;</td>
+                }
+                @if (pfile.Twitch != "")
+                {
+                    <td>Twitch &emsp;</td>
+                }
+                @if (pfile.Discord != "")
+                {
+                    <td>Discord &emsp;</td>
+                }
+                @if (pfile.Twitter != "")
+                {
+                    <td>Twitter &emsp;</td>
+                }
 
-        </tr>
+            </tr>
     
-        <tr>
-            <td>@profile.User</td>
-            <td>@profile.Name</td>
-            @if (profile.Website != "")
-            {
-                <td>@profile.Website</td>
+            <tr>
+                <td>@pfile.User</td>
+                <td>@pfile.Name</td>
+                @if (pfile.Website != "")
+                {
+                    <td>@pfile.Website</td>
+                }
+                @if (pfile.Twitch != "")
+                {
+                    <td>@pfile.Twitch</td>
+                }
+                @if (pfile.Discord != "")
+                {
+                    <td>@pfile.Discord</td>
+                }
+                @if (pfile.Twitter != "")
+                {
+                    <td>@pfile.Twitter</td>
+                }
+            </tr>
             }
-            @if (profile.Twitch != "")
-            {
-                <td>@profile.Twitch</td>
-            }
-            @if (profile.Discord != "")
-            {
-                <td>@profile.Discord</td>
-            }
-            @if (profile.Twitter != "")
-            {
-                <td>@profile.Twitter</td>
-            }
-        </tr>
-        }
     </table>
 }
 
@@ -81,7 +84,7 @@ else
 {
     /*private Profile[] profile;
             private Profiles[] profiles;*/
-    private List<Profile> profile;//List<Profile> profile;
+    private List<Profile> profile = new List<Profile>();//List<Profile> profile;
     private Profiles[] profiles;
 
     private string who = string.Empty;
@@ -99,12 +102,13 @@ else
                 profiles = await Http.GetFromJsonAsync<Profiles[]>("profiles/" + "FullDisplayProfiles" + ".json");
                 try
                 {
-                    
+
                     foreach(var pfile in profiles)
                     {
-                        if(pfile.User.Equals(who))// == who)
+                        if(pfile.User == who)
                         {
-                            profile.Add(await Http.GetFromJsonAsync<Profile>("profiles/" + who + ".json"));
+                        profile = new List<Profile>(await Http.GetFromJsonAsync<List<Profile>>("profiles/" + who + ".json"));
+                    //profile.Add(await Http.GetFromJsonAsync<Profile>("profiles/" + who + ".json"));
                                 //Append( await Http.GetFromJsonAsync<Profile[]>("profiles"+pfile.User + ".json"));
                             //profile.Add(await Http.GetFromJsonAsync<Profile>("profiles/"+ pfile.User + ".json"));
                             inList = true;
@@ -119,44 +123,6 @@ else
                     Console.Out.WriteLine("not found after attempting to add to profile group");
                     Console.Out.WriteLine(notFound);
                 }
-            }
-            catch (Exception notFound)
-            {
-                Console.Out.WriteLine("Not found when attempting to read from full diplay profiles");
-                Console.Out.WriteLine(notFound);
-            }
-            /*
-            try
-            {
-                profile = await Http.GetFromJsonAsync<List<Profile>>("profiles/" + who + ".json");
-
-                inList = true;
-                memberFound = true;
-
-            }
-            catch (Exception notFound)
-            {
-                Console.Out.WriteLine(notFound);
-            }*/
-        }
-        if(!memberFound)
-        {
-            try
-            {//make json for getting list of people to add then load each into a profile object
-                /*profiles = await Http.GetFromJsonAsync<Profiles[]>("profiles/" + "FullDisplayProfiles" + ".json");
-                try
-                {
-                    foreach(var pfile in profiles)
-                    {
-                        profile.Add(await Http.GetFromJsonAsync<Profile>("profiles/"+ pfile.User + ".json"));
-                        //profile.Append(await Http.GetFromJsonAsync<Profile[]>("profiles/" + pfile.User + ".json"));
-                    }
-                }
-                catch(Exception notFound)
-                {
-                    Console.Out.WriteLine("not found after attempting to add to profile group");
-                    Console.Out.WriteLine(notFound);
-                }*/
             }
             catch (Exception notFound)
             {
