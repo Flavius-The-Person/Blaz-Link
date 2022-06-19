@@ -4,7 +4,7 @@
 
 <!--p>Short Url: @shortUrl</p-->
 <!--p>main site: @mainUrl2</p-->
-
+<!--
 @if(inList)
 {
     <p>in list</p>
@@ -13,31 +13,29 @@
 {
     <p>Not in list</p>
 }
-@if(profile.Count==0)
+-->
+@if (profile.Count == 0)
 {
-    @if(profiles != null)
+    @if (profiles != null)
     {
-        <p> profiles has content while profile still loading</p>
-        @foreach(var pfile in profiles)
+        @foreach (var pfile in profiles)
         {
             <p>@pfile.User</p>
         }
     }
-    <p>Loading...</p>
-
 }
 else
-@if(profile.Count>0)
+@if (profile.Count > 0)
 {
-    <p>profile is not null</p>
-    <p>profile count is: @profile.Count</p>
+    <!--p>profile is not null</p>
+    <p>profile count is: profile.Count</p-->
     <table>
-        @foreach(var pfile in profile)
+        @foreach (var pfile in profile)
         {
             <tr>
                 <td>User &emsp;</td>
                 <td>Name &emsp;</td>
-                @if (pfile.Website!="")
+                @if (pfile.Website != "")
                 {
                     <td>Main Website &emsp;</td>
                 }
@@ -55,7 +53,6 @@ else
                 }
 
             </tr>
-    
             <tr>
                 <td>@pfile.User</td>
                 <td>@pfile.Name</td>
@@ -76,15 +73,13 @@ else
                     <td>@pfile.Twitter</td>
                 }
             </tr>
-            }
+        }
     </table>
 }
 
 @code 
 {
-    /*private Profile[] profile;
-            private Profiles[] profiles;*/
-    private List<Profile> profile = new List<Profile>();//List<Profile> profile;
+    private List<Profile> profile = new List<Profile>();
     private Profiles[] profiles;
 
     private string who = string.Empty;
@@ -98,24 +93,19 @@ else
         if (who != string.Empty)
         {
             try
-            {//make json for getting list of people to add then load each into a profile object
+            {
+                //make json for getting list of people to add then load each into a profile object
                 profiles = await Http.GetFromJsonAsync<Profiles[]>("profiles/" + "FullDisplayProfiles" + ".json");
                 try
                 {
-
                     foreach(var pfile in profiles)
                     {
                         if(pfile.User == who)
                         {
-                        profile = new List<Profile>(await Http.GetFromJsonAsync<List<Profile>>("profiles/" + who + ".json"));
-                    //profile.Add(await Http.GetFromJsonAsync<Profile>("profiles/" + who + ".json"));
-                                //Append( await Http.GetFromJsonAsync<Profile[]>("profiles"+pfile.User + ".json"));
-                            //profile.Add(await Http.GetFromJsonAsync<Profile>("profiles/"+ pfile.User + ".json"));
+                            profile = new List<Profile>(await Http.GetFromJsonAsync<List<Profile>>("profiles/" + who + ".json"));
                             inList = true;
                             memberFound = true;
                         }
-                        //profile.Add(await Http.GetFromJsonAsync<Profile>("profiles/"+ pfile.User + ".json"));
-                        //profile.Append(await Http.GetFromJsonAsync<Profile[]>("profiles/" + pfile.User + ".json"));
                     }
                 }
                 catch(Exception notFound)
@@ -130,8 +120,6 @@ else
                 Console.Out.WriteLine(notFound);
             }
         }
-
-
     }
     public class Profiles
     {
