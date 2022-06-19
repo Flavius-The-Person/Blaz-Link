@@ -1,9 +1,13 @@
-﻿@page "/l"
+﻿@page "/l/{user}/{shortUrl}"
 @inject HttpClient Http
 @inject NavigationManager NavManager
 
-<!--p>Short Url: @shortUrl</p-->
-<!--p>main site: @mainUrl2</p-->
+<p>Short Url: @shortUrl</p>
+
+<p>User: @user</p>
+
+<!--p>Short Url2: </p-->
+<!--p>main site: </p-->
 
 
 
@@ -22,20 +26,17 @@ else
     @foreach (var shortlink in shortlinks) 
     {
         if((shortlink.ListOnPage == "true") || (shortlink.ListOnPage=="TRUE"))
-       // @if(shortlink.ListOnPage)
         {   
             <tr>
                 <td>
-            <p>@shortlink.Name &emsp;</p>
-            </td>
-            <td>
-            <p>@shortlink.MainUrl &emsp;</p>
-            </td>
-            <td>
-            <p> @shortlink.ShortUrl</p>
-            </td>
-            
-                
+                    <p>@shortlink.Name &emsp;</p>
+                </td>
+                <td>
+                    <p>@shortlink.MainUrl &emsp;</p>
+                </td>
+                <td>
+                    <p> @shortlink.ShortUrl</p>
+                </td>
             </tr>
         }
     }
@@ -44,14 +45,16 @@ else
 
 @code {
     private Shortlinks[] shortlinks;
-    private string shortUrl = string.Empty;
-    private string mainUrl2 = string.Empty;
+    [Parameter]
+    public string shortUrl { get; set; }
+    [Parameter]
+    public string user { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-        shortlinks = await Http.GetFromJsonAsync<Shortlinks[]>("links.json");
+        shortlinks = await Http.GetFromJsonAsync<Shortlinks[]>("shortlinks/"+user+"-links.json");
 
-        NavManager.TryGetQueryString<string>("u", out shortUrl);
+
 
         foreach(var shortlink in shortlinks)
         {
