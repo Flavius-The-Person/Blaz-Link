@@ -1,4 +1,4 @@
-﻿@page "/p"
+﻿@page "/p/{who}"
 @inject HttpClient Http
 @inject NavigationManager NavManager
 
@@ -18,9 +18,10 @@
 {
     @if (profiles != null)
     {
+       <h1><p>Profiles Available</p></h1>
         @foreach (var pfile in profiles)
         {
-            <p>@pfile.User</p>
+            <a href="p/@pfile.User" class="btn btn-profile">@pfile.User</a>
         }
     }
 }
@@ -29,9 +30,26 @@ else
 {
     <!--p>profile is not null</p>
     <p>profile count is: profile.Count</p-->
-    <table>
+    <!--table-->
         @foreach (var pfile in profile)
         {
+            <button class="btn-profile">@pfile.User</button>
+            <button class="btn-profile">@pfile.Name</button>
+            <a href="@pfile.Website" class="btn btn-profile">Main Website: @pfile.Website</a>
+            <a href="https://Twitch.tv/@pfile.Twitch" class="btn btn-profile">Twitch.tv/@pfile.Twitch</a>
+            <a href="https://Discord.gg/@pfile.Discord" class="btn btn-profile">Discord.gg/@pfile.Discord</a>
+            <a href="https://Twitter.com/@pfile.Twitter" class="btn btn-profile">Twitter.com/@pfile.Twitter</a>
+            /*@if(pfile.Website != "")
+            {
+                <button class="btn-profile">@pfile.User</button>
+                <button class="btn-profile">@pfile.Name</button>
+                <a href="@pfile.Website" class="btn btn-profile">Main Website: @pfile.Website</a>
+                <a href="https://Twitch.tv/@pfile.Twitch" class="btn btn-profile">Twitch.tv/@pfile.Twitch</a>
+                <a href="https://Discord.gg/@pfile.Discord" class="btn btn-profile">Discord.gg/@pfile.Discord</a>
+                <a href="https://Twitter.com/@pfile.Twitter" class="btn btn-profile">Twitter.com/@pfile.Twitter</a>
+                
+            }*/
+                        /*
             <tr>
                 <td>User &emsp;</td>
                 <td>Name &emsp;</td>
@@ -58,7 +76,12 @@ else
                 <td>@pfile.Name</td>
                 @if (pfile.Website != "")
                 {
-                    <td>@pfile.Website</td>
+                    
+                    <td>
+                        <button class="glow-on-hover">
+                            @pfile.Website
+                        </button>
+                    </td>
                 }
                 @if (pfile.Twitch != "")
                 {
@@ -72,9 +95,9 @@ else
                 {
                     <td>@pfile.Twitter</td>
                 }
-            </tr>
+            </tr>*/
         }
-    </table>
+    <!--/table-->
 }
 
 @code 
@@ -82,13 +105,16 @@ else
     private List<Profile> profile = new List<Profile>();
     private Profiles[] profiles;
 
-    private string who = string.Empty;
+    [Parameter]
+    public string who { get; set; }
+
     private bool inList = false;
     private bool memberFound = false;
 
+
     protected override async Task OnInitializedAsync()
     {
-        NavManager.TryGetQueryString<string>("u", out who);
+        //NavManager.TryGetQueryString<string>("u", out who);
         Console.Out.WriteLine("who is: " + who);
         if (who != string.Empty)
         {
