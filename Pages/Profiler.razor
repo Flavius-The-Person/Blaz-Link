@@ -28,76 +28,18 @@
 else
 @if (profile.Count > 0)
 {
-    <!--p>profile is not null</p>
-    <p>profile count is: profile.Count</p-->
-    <!--table-->
         @foreach (var pfile in profile)
         {
             <button class="btn-profile">@pfile.User</button>
             <button class="btn-profile">@pfile.Name</button>
             <a href="@pfile.Website" class="btn btn-profile">Main Website: @pfile.Website</a>
             <a href="https://Twitch.tv/@pfile.Twitch" class="btn btn-profile">Twitch.tv/@pfile.Twitch</a>
-            <a href="https://Discord.gg/@pfile.Discord" class="btn btn-profile">Discord.gg/@pfile.Discord</a>
             <a href="https://Twitter.com/@pfile.Twitter" class="btn btn-profile">Twitter.com/@pfile.Twitter</a>
-            /*@if(pfile.Website != "")
-            {
-                <button class="btn-profile">@pfile.User</button>
-                <button class="btn-profile">@pfile.Name</button>
-                <a href="@pfile.Website" class="btn btn-profile">Main Website: @pfile.Website</a>
-                <a href="https://Twitch.tv/@pfile.Twitch" class="btn btn-profile">Twitch.tv/@pfile.Twitch</a>
-                <a href="https://Discord.gg/@pfile.Discord" class="btn btn-profile">Discord.gg/@pfile.Discord</a>
-                <a href="https://Twitter.com/@pfile.Twitter" class="btn btn-profile">Twitter.com/@pfile.Twitter</a>
-                
-            }*/
-                        /*
-            <tr>
-                <td>User &emsp;</td>
-                <td>Name &emsp;</td>
-                @if (pfile.Website != "")
-                {
-                    <td>Main Website &emsp;</td>
-                }
-                @if (pfile.Twitch != "")
-                {
-                    <td>Twitch &emsp;</td>
-                }
-                @if (pfile.Discord != "")
-                {
-                    <td>Discord &emsp;</td>
-                }
-                @if (pfile.Twitter != "")
-                {
-                    <td>Twitter &emsp;</td>
-                }
 
-            </tr>
-            <tr>
-                <td>@pfile.User</td>
-                <td>@pfile.Name</td>
-                @if (pfile.Website != "")
-                {
-                    
-                    <td>
-                        <button class="glow-on-hover">
-                            @pfile.Website
-                        </button>
-                    </td>
-                }
-                @if (pfile.Twitch != "")
-                {
-                    <td>@pfile.Twitch</td>
-                }
-                @if (pfile.Discord != "")
-                {
-                    <td>@pfile.Discord</td>
-                }
-                @if (pfile.Twitter != "")
-                {
-                    <td>@pfile.Twitter</td>
-                }
-            </tr>*/
+            //having trouble to get discord server to invite properly from a href or list
+            <!--a href="https://Discord.gg/invite/@pfile.DiscordServer" class="btn btn-profile">Discord.gg/@pfile.DiscordServer</a-->
+
         }
-    <!--/table-->
 }
 
 @code 
@@ -160,8 +102,8 @@ else
         public string ListOnPage { get; set; }
         public string Twitch { get; set; }
         public string Discord { get; set; }
+        public string DiscordServer { get; set; }
         public string Twitter { get; set; }
 
-        //public Boolean ListOnPage { get; set; }
     }
 }
