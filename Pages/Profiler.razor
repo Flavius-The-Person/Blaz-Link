@@ -14,19 +14,7 @@
     <p>Not in list</p>
 }
 -->
-@if (profile.Count == 0)
-{
-    @if (profiles != null)
-    {
-       <h1><p>Profiles Available</p></h1>
-        @foreach (var pfile in profiles)
-        {
-            <a href="p/@pfile.User" class="btn btn-profile">@pfile.User</a>
-        }
-    }
-}
-else
-@if (profile.Count > 0)
+@if (inList)//profile.Count > 0)
 {
         @foreach (var pfile in profile)
         {
@@ -41,6 +29,24 @@ else
 
         }
 }
+else
+@if (!inList)//profile.Count == 0)
+{
+    
+    //NavManager.NavigateTo("/profiles");
+    //<p>profiles.count = 0</p>
+    
+    @if (profiles != null)
+    {
+       <h1><p>Profiles Available</p></h1>
+        @foreach (var pfile in profiles)
+        {
+            <a href="/p/@pfile.User" class="btn-profile" onclick="ProfileButtonClick()">@pfile.User</a>
+            //<button class="btn-profile" onclick="ProfileButtonClick(@pfile.User)">@pfile.User</!--button>
+        }
+    }
+}
+
 
 @code 
 {
@@ -78,6 +84,46 @@ else
                 }
                 catch(Exception notFound)
                 {
+                    //NavManager.NavigateTo("/profiles");
+                    //Console.Out.WriteLine("not found after attempting to add to profile group");
+                    Console.Out.WriteLine(notFound);
+                }
+            }
+            catch (Exception notFound)
+            {
+                //Console.Out.WriteLine("Not found when attempting to read from full diplay profiles");
+                Console.Out.WriteLine(notFound);
+            }
+        }
+        if(!inList)
+        {
+            NavManager.NavigateTo("/profiles");
+        }
+    }
+
+    /*async Task ProfileButtonClick()
+    {
+        if (who != string.Empty)
+        {
+            try
+            {
+                //make json for getting list of people to add then load each into a profile object
+                profiles = await Http.GetFromJsonAsync<Profiles[]>("profiles/" + "FullDisplayProfiles" + ".json");
+                try
+                {
+                    foreach(var pfile in profiles)
+                    {
+                        if(pfile.User == who)
+                        {
+                            profile = new List<Profile>(await Http.GetFromJsonAsync<List<Profile>>("profiles/" + who + ".json"));
+                            inList = true;
+                            memberFound = true;
+                        }
+                    }
+                }
+                catch(Exception notFound)
+                {
+                    //NavManager.NavigateTo("/profiles");
                     Console.Out.WriteLine("not found after attempting to add to profile group");
                     Console.Out.WriteLine(notFound);
                 }
@@ -88,7 +134,9 @@ else
                 Console.Out.WriteLine(notFound);
             }
         }
-    }
+        //NavManager.NavigateTo("/p/" + user);
+    }*/
+
     public class Profiles
     {
         public string User { get; set; }
