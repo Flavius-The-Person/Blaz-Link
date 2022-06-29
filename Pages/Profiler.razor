@@ -70,8 +70,8 @@ else
             Console.Out.WriteLine("Who is " + who);
             try
             {
-                //String lWho = who.ToLower();
-                profile = new List<Profile2>(await Http.GetFromJsonAsync<List<Profile2>>("profiles/" + who + ".json"));
+                String lWho = who.ToLower();
+                profile = new List<Profile2>(await Http.GetFromJsonAsync<List<Profile2>>("profiles/" + lWho + ".json"));
                 inList = true;
                 memberFound = true;
                 if(profile!=null)
