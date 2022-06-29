@@ -74,9 +74,11 @@ else
                 {
                     foreach(var pfile in profiles)
                     {
-                        if(pfile.User == who)
+                        String puser = pfile.User.ToLower();
+                        String pwho = who.ToLower();
+                        if(puser == pwho)
                         {
-                            profile = new List<Profile>(await Http.GetFromJsonAsync<List<Profile>>("profiles/" + who + ".json"));
+                            profile = new List<Profile>(await Http.GetFromJsonAsync<List<Profile>>("profiles/" + pwho + ".json"));
                             inList = true;
                             memberFound = true;
                         }
