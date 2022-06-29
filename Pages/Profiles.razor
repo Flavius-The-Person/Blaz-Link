@@ -7,8 +7,10 @@
    <h1><p>Profiles Available</p></h1>
     @foreach (var pfile in profiles)
     {
-        <a href="p/@pfile.User" class="btn btn-profile">@pfile.User</a>
-
+        @if(pfile.ListOnPage == "true" || pfile.ListOnPage == "True" || pfile.ListOnPage == "TRUE")
+       {
+           <a href="p/@pfile.User" class="btn btn-profile">@pfile.User</a>
+       }
     }
 }
 @code 
