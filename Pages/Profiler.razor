@@ -16,18 +16,19 @@
 -->
 @if (inList)//profile.Count > 0)
 {
-        @foreach (var pfile in profile)
+    //<p>Profile Showing</p>
+    @foreach (var pfile in profile)
+    {
+        <button class="btn-profile">@pfile.UserName</button>
+        <button class="btn-profile">@pfile.DisplayName</button>
+        @foreach(var link in pfile.Links)
         {
-            <button class="btn-profile">@pfile.User</button>
-            <button class="btn-profile">@pfile.Name</button>
-            <a href="@pfile.Website" class="btn btn-profile">Main Website: @pfile.Website</a>
-            <a href="https://Twitch.tv/@pfile.Twitch" class="btn btn-profile">Twitch.tv/@pfile.Twitch</a>
-            <a href="https://Twitter.com/@pfile.Twitter" class="btn btn-profile">Twitter.com/@pfile.Twitter</a>
-
-            //having trouble to get discord server to invite properly from a href or list
-            <!--a href="https://Discord.gg/invite/@pfile.DiscordServer" class="btn btn-profile">Discord.gg/@pfile.DiscordServer</a-->
-
+            @if(link.ButtonText!="")
+            {
+                <a href="@link.LinksTo" class="btn btn-profile">@link.ButtonText</a>
+            }
         }
+    }
 }
 else
 @if (!inList)//profile.Count == 0)
@@ -50,7 +51,7 @@ else
 
 @code 
 {
-    private List<Profile> profile = new List<Profile>();
+    private List<Profile2> profile = new List<Profile2>();
     private Profiles[] profiles;
 
     [Parameter]
@@ -66,34 +67,60 @@ else
         //Console.Out.WriteLine("who is: " + who);
         if (who != string.Empty)
         {
+            Console.Out.WriteLine("Who is " + who);
             try
             {
-                //make json for getting list of people to add then load each into a profile object
-                profiles = await Http.GetFromJsonAsync<Profiles[]>("profiles/" + "FullDisplayProfiles" + ".json");
-                try
+                //String lWho = who.ToLower();
+                profile = new List<Profile2>(await Http.GetFromJsonAsync<List<Profile2>>("profiles/" + who + ".json"));
+                inList = true;
+                memberFound = true;
+                if(profile!=null)
                 {
-                    foreach(var pfile in profiles)
+                    Console.Out.WriteLine("found: " + who + ".json");
+                    foreach(var pfile in profile)
                     {
-                        String puser = pfile.User.ToLower();
-                        String pwho = who.ToLower();
-                        if(puser == pwho)
-                        {
-                            profile = new List<Profile>(await Http.GetFromJsonAsync<List<Profile>>("profiles/" + pwho + ".json"));
-                            inList = true;
-                            memberFound = true;
-                        }
+                        Console.Out.WriteLine("profiles: " + pfile.DisplayName);
                     }
                 }
+                /*
+                //make json for getting list of people to add then load each into a profile object
+                profiles = await Http.GetFromJsonAsync<Profiles[]>("profiles/" + "FullDisplayProfiles" + ".json");
+                            try
+                            {
+                            foreach(var pfile in profiles)
+                            {
+                            String puser = pfile.User.ToLower();
+                            String pwho = who.ToLower();
+                            if(puser == pwho)
+                            {
+                            profile = new List<Profile>(await Http.GetFromJsonAsync<List<Profile>>("profiles/" + pwho + ".json"));
+                inList = true;
+                memberFound = true;
+                }
+                }
+                }
                 catch(Exception notFound)
-                {
+                    {
                     //NavManager.NavigateTo("/profiles");
                     //Console.Out.WriteLine("not found after attempting to add to profile group");
                     Console.Out.WriteLine(notFound);
-                }
+                }*/
             }
             catch (Exception notFound)
             {
-                //Console.Out.WriteLine("Not found when attempting to read from full diplay profiles");
+                inList = false;
+                memberFound = false;
+                try
+                {
+                    profiles = await Http.GetFromJsonAsync<Profiles[]>("profiles/FullDisplayProfiles.json");
+                }
+                catch (Exception notFoundTwo)
+                {
+                    Console.Out.WriteLine("Not found when attempting to read from full diplay profiles");
+                    Console.Out.WriteLine(notFoundTwo);
+                }
+
+                Console.Out.WriteLine("not found after attempting to add to profile group");
                 Console.Out.WriteLine(notFound);
             }
         }
@@ -103,47 +130,54 @@ else
         }
     }
 
-    /*async Task ProfileButtonClick()
-    {
-        if (who != string.Empty)
-        {
-            try
-            {
-                //make json for getting list of people to add then load each into a profile object
-                profiles = await Http.GetFromJsonAsync<Profiles[]>("profiles/" + "FullDisplayProfiles" + ".json");
-                try
-                {
-                    foreach(var pfile in profiles)
-                    {
-                        if(pfile.User == who)
-                        {
-                            profile = new List<Profile>(await Http.GetFromJsonAsync<List<Profile>>("profiles/" + who + ".json"));
-                            inList = true;
-                            memberFound = true;
-                        }
-                    }
-                }
-                catch(Exception notFound)
-                {
-                    //NavManager.NavigateTo("/profiles");
-                    Console.Out.WriteLine("not found after attempting to add to profile group");
-                    Console.Out.WriteLine(notFound);
-                }
-            }
-            catch (Exception notFound)
-            {
-                Console.Out.WriteLine("Not found when attempting to read from full diplay profiles");
-                Console.Out.WriteLine(notFound);
-            }
-        }
-        //NavManager.NavigateTo("/p/" + user);
-    }*/
+    
 
+    public partial class Profile2
+    {
+        //[JsonProperty("UserName", NullValueHandling = NullValueHandling.Ignore)]
+        public string UserName { get; set; }
+
+        //[JsonProperty("DisplayName", NullValueHandling = NullValueHandling.Ignore)]
+        public string DisplayName { get; set; }
+
+        //[JsonProperty("Links", NullValueHandling = NullValueHandling.Ignore)]
+        public List<Link> Links { get; set; }
+
+        //[JsonProperty("ShortLinks", NullValueHandling = NullValueHandling.Ignore)]
+        public List<ShortLink> ShortLinks { get; set; }
+    }
+
+    public partial class Link
+    {
+        //[JsonProperty("Name", NullValueHandling = NullValueHandling.Ignore)]
+        public string Name { get; set; }
+
+        //[JsonProperty("ButtonText", NullValueHandling = NullValueHandling.Ignore)]
+        public string ButtonText { get; set; }
+
+        //[JsonProperty("LinksTo", NullValueHandling = NullValueHandling.Ignore)]
+        public string LinksTo { get; set; }
+    }
+
+    public partial class ShortLink
+    {
+        //[JsonProperty("Name", NullValueHandling = NullValueHandling.Ignore)]
+        public string Name { get; set; }
+
+        //[JsonProperty("MainUrl", NullValueHandling = NullValueHandling.Ignore)]
+        public Uri MainUrl { get; set; }
+
+        //[JsonProperty("ShortUrl", NullValueHandling = NullValueHandling.Ignore)]
+        public string ShortUrl { get; set; }
+
+        //[JsonProperty("ListOnPage", NullValueHandling = NullValueHandling.Ignore)]
+        public string ListOnPage { get; set; }
+    }
     public class Profiles
     {
         public string User { get; set; }
         public string ListOnPage { get; set;  }
-    }
+    }/*
     public class Profile
     {
         public string User { get; set; }
@@ -156,4 +190,6 @@ else
         public string Twitter { get; set; }
 
     }
+    */
 }
+
