@@ -52,19 +52,26 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        shortlinks = await Http.GetFromJsonAsync<Shortlinks[]>("shortlinks/"+user+"-links.json");
-
-
-
-        foreach(var shortlink in shortlinks)
+        try
         {
-            if(shortUrl == shortlink.ShortUrl)
+
+            shortlinks = await Http.GetFromJsonAsync<Shortlinks[]>("shortlinks/"+user+"-links.json");
+
+
+
+            foreach(var shortlink in shortlinks)
             {
-                shortUrl = "in list";
-                NavManager.NavigateTo(shortlink.MainUrl);
+                if(shortUrl == shortlink.ShortUrl)
+                {
+                    shortUrl = "in list";
+                    NavManager.NavigateTo(shortlink.MainUrl);
+                }
             }
         }
-        shortUrl = shortUrl + " is not in list";
+        catch(Exception userNotFound)
+        {
+            shortUrl = shortUrl + " is not in list";
+        }
     }
 
     public class Shortlinks
