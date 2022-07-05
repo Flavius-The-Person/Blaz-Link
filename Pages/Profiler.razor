@@ -83,29 +83,6 @@ else
                         Console.Out.WriteLine("profiles: " + pfile.DisplayName);
                     }
                 }
-                /*
-                //make json for getting list of people to add then load each into a profile object
-                profiles = await Http.GetFromJsonAsync<Profiles[]>("profiles/" + "FullDisplayProfiles" + ".json");
-                            try
-                            {
-                            foreach(var pfile in profiles)
-                            {
-                            String puser = pfile.User.ToLower();
-                            String pwho = who.ToLower();
-                            if(puser == pwho)
-                            {
-                            profile = new List<Profile>(await Http.GetFromJsonAsync<List<Profile>>("profiles/" + pwho + ".json"));
-                inList = true;
-                memberFound = true;
-                }
-                }
-                }
-                catch(Exception notFound)
-                    {
-                    //NavManager.NavigateTo("/profiles");
-                    //Console.Out.WriteLine("not found after attempting to add to profile group");
-                    Console.Out.WriteLine(notFound);
-                }*/
             }
             catch (Exception notFound)
             {
