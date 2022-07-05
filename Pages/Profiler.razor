@@ -19,8 +19,9 @@
     //<p>Profile Showing</p>
     @foreach (var pfile in profile)
     {
-        <button class="btn-profile">@pfile.UserName</button>
-        <button class="btn-profile">@pfile.DisplayName</button>
+        <h1 style="text-align:center">Welcome to the profile of @pfile.DisplayName</h1>
+        //<button class="btn-profile">@pfile.UserName</button>
+        //<button class="btn-profile">@pfile.DisplayName</button>
         @foreach(var link in pfile.Links)
         {
             @if(link.ButtonText!="")
