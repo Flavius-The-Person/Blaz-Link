@@ -6,11 +6,6 @@
 
 <p>User: @user</p>
 
-<!--p>Short Url2: </p-->
-<!--p>main site: </p-->
-
-
-
 @if (shortlinks == null)
 {
     <p>Loading...</p>
@@ -54,10 +49,7 @@ else
     {
         try
         {
-
             shortlinks = await Http.GetFromJsonAsync<Shortlinks[]>("shortlinks/"+user+"-links.json");
-
-
 
             foreach(var shortlink in shortlinks)
             {
@@ -80,7 +72,5 @@ else
         public string MainUrl { get; set; }
         public string ShortUrl { get; set; }
         public string ListOnPage { get; set; }
-        
-        //public Boolean ListOnPage { get; set; }
     }
 }
