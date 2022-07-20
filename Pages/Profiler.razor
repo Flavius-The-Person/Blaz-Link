@@ -2,26 +2,13 @@
 @inject HttpClient Http
 @inject NavigationManager NavManager
 
-<!--p>Short Url: @shortUrl</p-->
-<!--p>main site: @mainUrl2</p-->
-<!--
-@if(inList)
+
+@if (inList)
 {
-    <p>in list</p>
-}
-@if(!inList)
-{
-    <p>Not in list</p>
-}
--->
-@if (inList)//profile.Count > 0)
-{
-    //<p>Profile Showing</p>
     @foreach (var pfile in profile)
     {
         <h1 style="text-align:center">Welcome to the profile of @pfile.DisplayName</h1>
-        //<button class="btn-profile">@pfile.UserName</button>
-        //<button class="btn-profile">@pfile.DisplayName</button>
+        
         @foreach(var link in pfile.Links)
         {
             @if(link.ButtonText!="")
@@ -32,11 +19,9 @@
     }
 }
 else
-@if (!inList)//profile.Count == 0)
+@if (!inList)
 {
     
-    //NavManager.NavigateTo("/profiles");
-    //<p>profiles.count = 0</p>
     
     @if (profiles != null)
     {
@@ -44,7 +29,6 @@ else
         @foreach (var pfile in profiles)
         {
             <a href="/p/@pfile.User" class="btn-profile" onclick="ProfileButtonClick()">@pfile.User</a>
-            //<button class="btn-profile" onclick="ProfileButtonClick(@pfile.User)">@pfile.User</!--button>
         }
     }
 }
@@ -64,8 +48,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        //NavManager.TryGetQueryString<string>("u", out who);
-        //Console.Out.WriteLine("who is: " + who);
         if (who != string.Empty)
         {
             Console.Out.WriteLine("Who is " + who);
