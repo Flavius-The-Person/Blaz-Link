@@ -2,13 +2,11 @@
 @inject HttpClient Http
 @inject NavigationManager NavManager
 
-
 @if (inList)
 {
     @foreach (var pfile in profile)
     {
         <h1 style="text-align:center">Welcome to the profile of @pfile.DisplayName</h1>
-        
         @foreach(var link in pfile.Links)
         {
             @if(link.ButtonText!="")
@@ -18,53 +16,29 @@
         }
     }
 }
-else
-@if (!inList)
-{
-    
-    
-    @if (profiles != null)
-    {
-       <h1><p>Profiles Available</p></h1>
-        @foreach (var pfile in profiles)
-        {
-            <a href="/p/@pfile.User" class="btn-profile" onclick="ProfileButtonClick()">@pfile.User</a>
-        }
-    }
-}
-
 
 @code 
 {
-    private List<Profile> profile = new List<Profile>();
-    private Profiles[] profiles;
 
     [Parameter]
     public string who { get; set; }
 
+    private List<Profile> profile = new List<Profile>();
+    private Profiles[] profiles;
+
     private bool inList = false;
     private bool memberFound = false;
-
 
     protected override async Task OnInitializedAsync()
     {
         if (who != string.Empty)
         {
-            Console.Out.WriteLine("Who is " + who);
             try
             {
                 String lWho = who.ToLower();
                 profile = new List<Profile>(await Http.GetFromJsonAsync<List<Profile>>("profiles/" + lWho + ".json"));
                 inList = true;
                 memberFound = true;
-                if(profile!=null)
-                {
-                    Console.Out.WriteLine("found: " + who + ".json");
-                    foreach(var pfile in profile)
-                    {
-                        Console.Out.WriteLine("profiles: " + pfile.DisplayName);
-                    }
-                }
             }
             catch (Exception notFound)
             {
@@ -76,12 +50,9 @@ else
                 }
                 catch (Exception notFoundTwo)
                 {
-                    Console.Out.WriteLine("Not found when attempting to read from full diplay profiles");
-                    Console.Out.WriteLine(notFoundTwo);
+                    
                 }
 
-                Console.Out.WriteLine("not found after attempting to add to profile group");
-                Console.Out.WriteLine(notFound);
             }
         }
         if(!inList)
@@ -93,43 +64,32 @@ else
 
     public partial class Profile
     {
-        //[JsonProperty("UserName", NullValueHandling = NullValueHandling.Ignore)]
         public string UserName { get; set; }
 
-        //[JsonProperty("DisplayName", NullValueHandling = NullValueHandling.Ignore)]
         public string DisplayName { get; set; }
 
-        //[JsonProperty("Links", NullValueHandling = NullValueHandling.Ignore)]
         public List<Link> Links { get; set; }
 
-        //[JsonProperty("ShortLinks", NullValueHandling = NullValueHandling.Ignore)]
         public List<ShortLink> ShortLinks { get; set; }
     }
 
     public partial class Link
     {
-        //[JsonProperty("Name", NullValueHandling = NullValueHandling.Ignore)]
         public string Name { get; set; }
 
-        //[JsonProperty("ButtonText", NullValueHandling = NullValueHandling.Ignore)]
         public string ButtonText { get; set; }
 
-        //[JsonProperty("LinksTo", NullValueHandling = NullValueHandling.Ignore)]
         public string LinksTo { get; set; }
     }
 
     public partial class ShortLink
     {
-        //[JsonProperty("Name", NullValueHandling = NullValueHandling.Ignore)]
         public string Name { get; set; }
 
-        //[JsonProperty("MainUrl", NullValueHandling = NullValueHandling.Ignore)]
         public Uri MainUrl { get; set; }
 
-        //[JsonProperty("ShortUrl", NullValueHandling = NullValueHandling.Ignore)]
         public string ShortUrl { get; set; }
 
-        //[JsonProperty("ListOnPage", NullValueHandling = NullValueHandling.Ignore)]
         public string ListOnPage { get; set; }
     }
     public class Profiles
