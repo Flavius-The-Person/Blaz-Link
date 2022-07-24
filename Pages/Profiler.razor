@@ -16,17 +16,13 @@
         }
     }
 }
-
 @code 
 {
     [Parameter]
     public string who { get; set; }
-
     private List<Profile> profile = new List<Profile>();
     private Profiles[] profiles;
-
     private bool inList = false;
-    private bool memberFound = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -34,15 +30,12 @@
         {
             try
             {
-                String lWho = who.ToLower();
-                profile = new List<Profile>(await Http.GetFromJsonAsync<List<Profile>>("profiles/" + lWho + ".json"));
+                profile = new List<Profile>(await Http.GetFromJsonAsync<List<Profile>>("profiles/" + who.ToLower() + ".json"));
                 inList = true;
-                memberFound = true;
             }
             catch (Exception notFound)
             {
                 inList = false;
-                memberFound = false;
                 try
                 {
                     profiles = await Http.GetFromJsonAsync<Profiles[]>("profiles/FullDisplayProfiles.json");
@@ -59,31 +52,23 @@
     public partial class Profile
     {
         public string UserName { get; set; }
-
         public string DisplayName { get; set; }
-
         public List<Link> Links { get; set; }
-
         public List<ShortLink> ShortLinks { get; set; }
     }
 
     public partial class Link
     {
         public string Name { get; set; }
-
         public string ButtonText { get; set; }
-
         public string LinksTo { get; set; }
     }
 
     public partial class ShortLink
     {
         public string Name { get; set; }
-
         public Uri MainUrl { get; set; }
-
         public string ShortUrl { get; set; }
-
         public string ListOnPage { get; set; }
     }
 
