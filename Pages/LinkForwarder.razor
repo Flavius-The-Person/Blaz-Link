@@ -3,9 +3,7 @@
 @inject NavigationManager NavManager
 
 <p>Short Url: @shortUrl</p>
-
 <p>User: @user</p>
-
 @if (shortlinks == null)
 {
     <p>Loading...</p>
@@ -18,26 +16,19 @@ else
             <td>Main Url &emsp;</td>
             <td>Short Url &emsp;</td>
         </tr>
-    @foreach (var shortlink in shortlinks) 
-    {
-        if((shortlink.ListOnPage == "true") || (shortlink.ListOnPage=="TRUE"))
-        {   
-            <tr>
-                <td>
-                    <p>@shortlink.Name &emsp;</p>
-                </td>
-                <td>
-                    <p>@shortlink.MainUrl &emsp;</p>
-                </td>
-                <td>
-                    <p> @shortlink.ShortUrl</p>
-                </td>
-            </tr>
+        @foreach (var shortlink in shortlinks) 
+        {
+            if((shortlink.ListOnPage == "true") || (shortlink.ListOnPage=="TRUE"))
+            {   
+                <tr>
+                    <td>@shortlink.Name &emsp;</td>
+                    <td>@shortlink.MainUrl &emsp;</td>
+                    <td>@shortlink.ShortUrl</td>
+                </tr>
+            }
         }
-    }
     </table>
 }
-
 @code {
     private Shortlinks[] shortlinks;
     [Parameter]
@@ -50,7 +41,6 @@ else
         try
         {
             shortlinks = await Http.GetFromJsonAsync<Shortlinks[]>("shortlinks/"+user+"-links.json");
-
             foreach(var shortlink in shortlinks)
             {
                 if(shortUrl == shortlink.ShortUrl)
