@@ -48,7 +48,6 @@
             NavManager.NavigateTo("/profiles");
         }
     }
-
     public partial class Profile
     {
         public string UserName { get; set; }
@@ -56,14 +55,12 @@
         public List<Link> Links { get; set; }
         public List<ShortLink> ShortLinks { get; set; }
     }
-
     public partial class Link
     {
         public string Name { get; set; }
         public string ButtonText { get; set; }
         public string LinksTo { get; set; }
     }
-
     public partial class ShortLink
     {
         public string Name { get; set; }
@@ -71,7 +68,6 @@
         public string ShortUrl { get; set; }
         public string ListOnPage { get; set; }
     }
-
     public class Profiles
     {
         public string User { get; set; }
