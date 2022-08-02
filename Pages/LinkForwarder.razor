@@ -29,7 +29,8 @@ else
         }
     </table>
 }
-@code {
+@code 
+{
     private Shortlinks[] shortlinks;
     [Parameter]
     public string shortUrl { get; set; }
@@ -55,7 +56,6 @@ else
             shortUrl = shortUrl + " is not in list";
         }
     }
-
     public class Shortlinks
     {
         public string Name { get; set; }
