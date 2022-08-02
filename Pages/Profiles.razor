@@ -22,7 +22,7 @@
         {
             profiles = await Http.GetFromJsonAsync<ProfileList[]>("profiles/FullDisplayProfiles.json");
         }
-        catch(ExecutionEngineException notFound)
+        catch(Exception notFound)
         {
             Console.Out.WriteLine("Not found when attempting to read from full display profiles");
             Console.Out.WriteLine(notFound);
