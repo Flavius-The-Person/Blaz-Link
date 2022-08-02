@@ -32,7 +32,6 @@ namespace BlazLink
                     return true;
                 }
             }
-
             value = default;
             return false;
         }
