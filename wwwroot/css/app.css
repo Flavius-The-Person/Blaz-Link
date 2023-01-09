@@ -28,10 +28,16 @@ app {
 
 .main {
     flex: 1;
+    color: white;
+    text-align: left;
+    background-color: black;
 }
 
     .main .top-row {
-        background-color: #f7f7f7;
+        flex: 1;
+        color: white;
+        text-align: left;
+        background-color: black;
         border-bottom: 1px solid #d6d5d5;
         justify-content: flex-end;
     }
